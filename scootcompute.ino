@@ -83,6 +83,9 @@ char rpms[4];
 //battery amperage
 int amper = 0;
 char ampers[4];
+//voltage
+float volt = 0;
+char volts[6];
 
 //setup function called on reset/powerup
 void setup(void)   
@@ -142,8 +145,13 @@ void loop(void)
 
   if (count == 4) 
   {
+    //read batterycurrent
     amper = (float) (((amper*3.0)+analogRead(5))/4.0);
     itoa(map(amper,512,943,0,75),ampers,10);
+    //read voltage
+    volt = (((volt*2.0)+analogRead(2))/3.0);
+    dtostrf(volt*(4.9/92.5),5,1,volts);
+
   }
 
   if (count == 6)
@@ -178,9 +186,9 @@ void draw(void)
   u8g.drawLine(0,50,127,50);
   //symbols
   u8g.drawBitmapP( 5, 38, 2, 10, sym_bata);
-  u8g.drawBitmapP( 70, 38, 2, 10, sym_batv);
+  u8g.drawBitmapP( 67, 38, 2, 10, sym_batv);
   u8g.drawBitmapP( 5, 53, 2, 10, sym_oil);
-  u8g.drawBitmapP( 75, 53, 1, 10, sym_temp);
+  u8g.drawBitmapP( 72, 53, 1, 10, sym_temp);
   //temps and "°C"
   //u8g.setFontPosBaseline();
   u8g.setFont(u8g_font_freedoomr25n);
@@ -189,7 +197,9 @@ void draw(void)
   u8g.setFont(u8g_font_7x14);
   u8g.drawStr(97, 31, "rpm");
   u8g.drawStr(45-(strlen(ampers)*7), 48, ampers);
-  u8g.drawStr(51, 48, "A");  
+  u8g.drawStr(51, 48, "A");
+  u8g.drawStr(113-(strlen(volts)*7), 48, volts);
+  u8g.drawStr(117, 48, "V");  
   u8g.drawStr(45-(strlen(oiltemps)*7), 63, oiltemps);
   u8g.drawStr(44, 63, "\xb0""C");
   u8g.drawStr(78, 63, outsidetemps);
@@ -205,5 +215,6 @@ ISR(TIMER1_CAPT_vect)
   //keep current measurement
   lastcapture = timercapture;
 }
+
 
 
