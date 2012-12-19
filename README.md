@@ -12,3 +12,5 @@ It is arduino based and uses an LCD to display information
 * engine revs: via ICP interrupt of the ATmega
 
 The display is ST7565 based but any display supported by U8Glib should more or less plug and play.
+
+Pictures of the current state: http://goo.gl/qn9DZ
